@@ -193,3 +193,9 @@ a.row.live:hover { background: var(--hl-soft); }
   .from-notes img { width: 96px; }
 }
 @media (prefers-reduced-motion: reduce) { .book-card.live { transition: none; } }
+
+/* How this is made */
+.made { padding-top: 8px; padding-bottom: 56px; }
+.made p { margin: 16px 0 0; font-size: 20px; line-height: 1.6; color: var(--ink-soft); }
+.made-link { margin-top: 22px; display: flex; gap: 18px; align-items: center; font-family: var(--sans); font-size: 16px; font-weight: 600; }
+.made-link img { width: 92px; flex: none; border: 1px solid var(--rule); border-radius: 6px; transform: rotate(-2deg); box-shadow: 0 4px 12px rgba(35, 32, 26, 0.12); }
