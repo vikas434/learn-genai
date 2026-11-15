@@ -23,7 +23,6 @@ npm run build
 | `src/data/changelog.json` | The "What's new" list. |
 | `public/drawings/<track>/` | Hand-drawn GIFs and their still frames. |
 | `raw-notes/<date>/` | Vikas's handwritten notes, typed up. The source for all content. |
-| `skills/` | The pipeline that turns notes into lessons, drawings and Shorts, and the scene sources for each drawing. |
 
 ## Adding a lesson
 
