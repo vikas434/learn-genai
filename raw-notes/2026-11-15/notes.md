@@ -1,6 +1,6 @@
 # Notes — 2026-11-15
 
-Typed from Vikas's handwritten PDF "AI context Engineering" (22 pages). The PDF itself is not in the repo.
+Typed from Vikas's handwritten PDF "AI context Engineering" (22 pages), saved beside this file as handwritten-notes.pdf (pages re-saved at a lower resolution, metadata removed).
 Lines marked TODO, READ or Question are his own reminders and open questions.
 
 ## Prompt engineering → context engineering

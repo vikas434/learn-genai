@@ -30,6 +30,7 @@ const first = firstLive(t)!;
               {l.status === 'live' ? (
                 <a class="row live" href={lessonUrl(t, l)} data-key={`${t.slug}/${l.slug}`} data-n={l.n}>
                   <span class="row-num">{l.n}</span>
+                  {l.thumb && <img class="row-thumb" src={l.thumb} alt="" width="120" height="68" loading="lazy" />}
                   <span class="row-main"><span class="row-title">{l.title}</span><span class="row-blurb">{l.blurb}</span></span>
                   <span class="row-tag">{l.minutes} min</span>
                 </a>
@@ -46,6 +47,13 @@ const first = firstLive(t)!;
       </section>
     ))}
     <p class="note-hand">More lessons are added as the notes are finished.</p>
+    {t.notes && t.notes.length > 0 && (
+      <section class="notes-box">
+        <h2 class="hand-h"><span>The handwritten notes</span></h2>
+        <p>Every lesson in this track is written from these notes. You can read the originals.</p>
+        <ul>{t.notes.map((nt) => <li><a href={nt.pdf}>Notes of {new Date(nt.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</a> · PDF, {nt.pages} pages</li>)}</ul>
+      </section>
+    )}
   </main>
 </Base>
 <script>

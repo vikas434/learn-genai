@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { tracks, isOpen, firstLive, lessonUrl } from '../data/site';
+import Cover from '../components/Cover.astro';
+import { tracks, isOpen, firstLive, lessonUrl, lessonsOf } from '../data/site';
 const first = tracks.find(isOpen)!;
 const start = lessonUrl(first, firstLive(first)!);
 ---
@@ -23,26 +24,30 @@ const start = lessonUrl(first, firstLive(first)!);
         <div><h3>4. Try it at work</h3><p>One thing to do today in the tools you already use.</p></div>
       </div>
     </section>
-    <section class="col book">
+    <section class="wrap book">
       <h2 class="hand-h"><span>The book so far</span></h2>
       <p>The site is written like a book, one track after another. A track opens when the notes for it are ready.</p>
-      <ol class="rows">
-        {tracks.map((t) => (
-          <li>
-            {isOpen(t) ? (
-              <a class="row" href={`/${t.slug}/`}>
-                <span class="row-main"><span class="row-title">{t.title}</span><span class="row-blurb">{t.blurb}</span></span>
-                <span class="row-tag open">Open, more lessons coming</span>
-              </a>
-            ) : (
-              <div class="row planned">
-                <span class="row-main"><span class="row-title">{t.title}</span><span class="row-blurb">{t.blurb}</span></span>
-                <span class="row-tag">{t.label ?? 'Coming'}</span>
-              </div>
-            )}
-          </li>
-        ))}
-      </ol>
+      <ul class="shelf">
+        {tracks.map((t) => {
+          const open = isOpen(t);
+          const live = lessonsOf(t).filter((l) => l.status === 'live').length;
+          return (
+            <li>
+              {open ? (
+                <a class="book-card live" href={`/${t.slug}/`}>
+                  <Cover n={t.n} slug={t.slug} title={t.title} />
+                  <span class="book-meta"><span class="book-title">{t.title}</span><span class="book-blurb">{t.blurb}</span><span class="book-tag open">Open now · {live} of {lessonsOf(t).length} lessons</span></span>
+                </a>
+              ) : (
+                <div class="book-card planned" aria-disabled="true">
+                  <Cover n={t.n} slug={t.slug} title={t.title} />
+                  <span class="book-meta"><span class="book-title">{t.title}</span><span class="book-blurb">{t.blurb}</span><span class="book-tag">{t.label ?? 'Coming'}</span></span>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </section>
   </main>
 </Base>

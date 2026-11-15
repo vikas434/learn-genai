@@ -29,6 +29,20 @@ const updated = new Date(fm.updated).toLocaleDateString('en-GB', { day: 'numeric
       </header>
       <div class="prose"><Content /></div>
       {fm.short && <p class="small" style="margin-top:28px"><a href={fm.short}>Watch this lesson as a short video</a></p>}
+      {fm.notebook && (
+        <section class="proof" aria-label="Prove it yourself">
+          <p class="eyebrow">Prove it yourself</p>
+          <p class="proof-t">{fm.notebook.title}</p>
+          <p class="proof-d">{fm.notebook.text}</p>
+          {fm.notebook.href ? <a class="btn" href={fm.notebook.href}>Open the notebook</a> : <span class="proof-soon">Notebook being prepared</span>}
+        </section>
+      )}
+      {fm.notesPage && t.notes && (
+        <section class="from-notes" aria-label="From the handwritten notes">
+          <a href={t.notes[0].pdf}><img src={fm.notesPage} alt="A page of Vikas's handwritten notes that this lesson is written from." width="696" height="900" loading="lazy" /></a>
+          <p>This lesson is written from my handwritten notes. <a href={t.notes[0].pdf}>Read all {t.notes[0].pages} pages</a>.</p>
+        </section>
+      )}
       <div id="end"></div>
       {nextRef && nextRef.status === 'live' ? (
         <a class="next" href={lessonUrl(t, nextRef)}><span class="next-k">Next · Lesson {nextRef.n}</span><span class="next-t">{nextRef.title}</span></a>

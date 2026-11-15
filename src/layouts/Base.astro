@@ -18,8 +18,9 @@ const fullTitle = title === 'learn-genai.in' ? title : `${title} · learn-genai.
   </head>
   <body>
     <slot name="top" />
+    <p class="beta-strip">This site is in beta. Lessons are still being written, and I am collecting feedback. <a href="https://www.linkedin.com/in/vikas008/">Send feedback on LinkedIn</a></p>
     <header class="wrap site-head">
-      <a class="brand" href="/">learn-genai.in</a>
+      <a class="brand" href="/">learn-genai.in<span class="beta">Beta</span></a>
       <nav class="site-nav" aria-label="Main">
         <a href="/context-engineering/" aria-current={current === 'contents' ? 'page' : undefined}>Contents</a>
         <a href="/whats-new/" aria-current={current === 'new' ? 'page' : undefined}>What's new</a>
