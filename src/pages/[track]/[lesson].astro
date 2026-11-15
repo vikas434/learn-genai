@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import { tracks, isOpen, lessonsOf, lessonUrl } from '../../data/site';
+export function getStaticPaths() {
+  const mods = import.meta.glob('../../content/lessons/**/*.mdx', { eager: true }) as Record<string, any>;
+  const list = Object.values(mods);
+  return tracks.filter(isOpen).flatMap((t) =>
+    lessonsOf(t).filter((l) => l.status === 'live').map((l) => {
+      const mod = list.find((m) => m.frontmatter.track === t.slug && m.frontmatter.slug === l.slug);
+      if (!mod) throw new Error(`roadmap.json marks ${t.slug}/${l.slug} live but no lesson file has that track and slug`);
+      return { params: { track: t.slug, lesson: l.slug }, props: { t, l, mod } };
+    })
+  );
+}
+const { t, l, mod } = Astro.props;
+const fm = mod.frontmatter;
+const Content = mod.Content;
+const all = lessonsOf(t);
+const nextRef = all.find((x) => x.n === l.n + 1);
+const updated = new Date(fm.updated).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title={l.title} description={l.blurb}>
+  <div slot="top" class="read-bar" aria-hidden="true"><div id="bar"></div></div>
+  <main>
+    <article class="lesson" data-key={`${t.slug}/${l.slug}`}>
+      <header class="lesson-head">
+        <p class="small"><a href={`/${t.slug}/`}>{t.title}</a> · Lesson {l.n} of {all.length} · {l.minutes} min read</p>
+        <h1>{l.title}</h1>
+      </header>
+      <div class="prose"><Content /></div>
+      {fm.short && <p class="small" style="margin-top:28px"><a href={fm.short}>Watch this lesson as a short video</a></p>}
+      <div id="end"></div>
+      {nextRef && nextRef.status === 'live' ? (
+        <a class="next" href={lessonUrl(t, nextRef)}><span class="next-k">Next · Lesson {nextRef.n}</span><span class="next-t">{nextRef.title}</span></a>
+      ) : nextRef ? (
+        <div class="next soon"><span class="next-k">Next · Lesson {nextRef.n} · being written</span><span class="next-t">{nextRef.title}</span></div>
+      ) : null}
+      <footer class="sources">
+        {(fm.sources ?? []).map((s: { text: string; href?: string }) => (
+          <p>Source: {s.href ? <a href={s.href}>{s.text}</a> : s.text}</p>
+        ))}
+        <p>From Vikas's handwritten notes. Last updated {updated}.</p>
+      </footer>
+    </article>
+  </main>
+</Base>
+<script>
+  const art = document.querySelector<HTMLElement>('.lesson')!;
+  const bar = document.getElementById('bar')!;
+  const end = document.getElementById('end')!;
+  const onScroll = () => {
+    const top = art.offsetTop;
+    const span = end.offsetTop - window.innerHeight * 0.6;
+    const p = Math.max(0, Math.min(1, (window.scrollY - top + 80) / Math.max(1, span)));
+    bar.style.width = `${p * 100}%`;
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+  new IntersectionObserver((es, ob) => {
+    if (!es.some((e) => e.isIntersecting)) return;
+    try {
+      const read: string[] = JSON.parse(localStorage.getItem('lg:read') || '[]');
+      const key = art.dataset.key!;
+      if (!read.includes(key)) { read.push(key); localStorage.setItem('lg:read', JSON.stringify(read)); }
+    } catch {}
+    ob.disconnect();
+  }).observe(end);
+</script>

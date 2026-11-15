@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import { tracks, isOpen, firstLive, lessonUrl } from '../data/site';
+const first = tracks.find(isOpen)!;
+const start = lessonUrl(first, firstLive(first)!);
+---
+<Base title="learn-genai.in" description="Short lessons on working with AI for senior engineers, tech leads and engineering managers. One clear idea at a time.">
+  <main>
+    <section class="col hero">
+      <p class="kicker">for engineers who build things</p>
+      <h1 class="display">Learn to work with AI, <span class="hl">one clear idea</span> at a time.</h1>
+      <p class="lede">Short lessons for senior engineers, tech leads and engineering managers. Each lesson explains one idea, shows it in a hand drawing, and ends with something you can try at work.</p>
+      <div class="actions">
+        <a class="btn" href={start}>Start reading</a>
+        <a class="link" href={`/${first.slug}/`}>See the contents</a>
+      </div>
+    </section>
+    <section class="wrap">
+      <div class="steps">
+        <div><h3>1. Read</h3><p>About five minutes. One idea, written in plain words.</p></div>
+        <div><h3>2. Watch it drawn</h3><p>The idea is drawn by hand, step by step, when you scroll to it.</p></div>
+        <div><h3>3. Check yourself</h3><p>One short question, so you know the idea has landed.</p></div>
+        <div><h3>4. Try it at work</h3><p>One thing to do today in the tools you already use.</p></div>
+      </div>
+    </section>
+    <section class="col book">
+      <h2 class="hand-h"><span>The book so far</span></h2>
+      <p>The site is written like a book, one track after another. A track opens when the notes for it are ready.</p>
+      <ol class="rows">
+        {tracks.map((t) => (
+          <li>
+            {isOpen(t) ? (
+              <a class="row" href={`/${t.slug}/`}>
+                <span class="row-main"><span class="row-title">{t.title}</span><span class="row-blurb">{t.blurb}</span></span>
+                <span class="row-tag open">Open, more lessons coming</span>
+              </a>
+            ) : (
+              <div class="row planned">
+                <span class="row-main"><span class="row-title">{t.title}</span><span class="row-blurb">{t.blurb}</span></span>
+                <span class="row-tag">{t.label ?? 'Coming'}</span>
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+  </main>
+</Base>

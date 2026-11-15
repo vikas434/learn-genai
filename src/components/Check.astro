@@ -1,0 +1,27 @@
+---
+interface Option { text: string; right?: boolean; say: string }
+interface Props { question: string; options: Option[] }
+const { question, options } = Astro.props;
+---
+<section class="check" aria-label="Check yourself">
+  <p class="eyebrow">Check yourself</p>
+  <p class="check-q">{question}</p>
+  <div class="check-opts">
+    {options.map((o) => (
+      <button type="button" aria-pressed="false" data-right={o.right ? '1' : '0'} data-say={o.say}>{o.text}</button>
+    ))}
+  </div>
+  <p class="check-out" role="status"></p>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('.check').forEach((box) => {
+    const out = box.querySelector<HTMLElement>('.check-out')!;
+    const btns = box.querySelectorAll<HTMLButtonElement>('button');
+    btns.forEach((b) => b.addEventListener('click', () => {
+      btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const right = b.dataset.right === '1';
+      out.textContent = b.dataset.say ?? '';
+      out.className = 'check-out ' + (right ? 'right' : 'wrong');
+    }));
+  });
+</script>

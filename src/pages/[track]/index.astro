@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import { tracks, isOpen, lessonsOf, lessonUrl, firstLive } from '../../data/site';
+export function getStaticPaths() {
+  return tracks.filter(isOpen).map((t) => ({ params: { track: t.slug }, props: { t } }));
+}
+const { t } = Astro.props;
+const all = lessonsOf(t);
+const live = all.filter((l) => l.status === 'live');
+const first = firstLive(t)!;
+---
+<Base title={t.title} description={t.blurb} current="contents">
+  <main class="col" data-track={t.slug}>
+    <div class="track-head">
+      <p class="eyebrow">Track {t.n}</p>
+      <h1 class="display">{t.title}</h1>
+      <p class="lede">{t.intro}</p>
+      <div class="actions">
+        <a class="btn" id="go" href={lessonUrl(t, first)}>Start lesson {first.n}</a>
+        <span class="small" id="count">{live.length} of {all.length} lessons ready</span>
+      </div>
+      <div class="meter" aria-hidden="true"><div id="meter"></div></div>
+    </div>
+    {t.parts!.map((p) => (
+      <section class="part">
+        <h2 class="hand-h"><span>{p.title}</span></h2>
+        <ol class="rows" style="margin-top:14px">
+          {p.lessons.map((l) => (
+            <li>
+              {l.status === 'live' ? (
+                <a class="row live" href={lessonUrl(t, l)} data-key={`${t.slug}/${l.slug}`} data-n={l.n}>
+                  <span class="row-num">{l.n}</span>
+                  <span class="row-main"><span class="row-title">{l.title}</span><span class="row-blurb">{l.blurb}</span></span>
+                  <span class="row-tag">{l.minutes} min</span>
+                </a>
+              ) : (
+                <div class="row planned">
+                  <span class="row-num">{l.n}</span>
+                  <span class="row-main"><span class="row-title">{l.title}</span><span class="row-blurb">{l.blurb}</span></span>
+                  <span class="row-tag">Coming</span>
+                </div>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+    <p class="note-hand">More lessons are added as the notes are finished.</p>
+  </main>
+</Base>
+<script>
+  let read: string[] = [];
+  try { read = JSON.parse(localStorage.getItem('lg:read') || '[]'); } catch {}
+  const rows = [...document.querySelectorAll<HTMLAnchorElement>('a.row.live')];
+  let next: HTMLAnchorElement | undefined;
+  let done = 0;
+  rows.forEach((r) => {
+    if (read.includes(r.dataset.key!)) {
+      r.classList.add('is-read'); done++;
+      r.querySelector('.row-tag')!.textContent = 'Read';
+    } else if (!next) next = r;
+  });
+  const go = document.getElementById('go') as HTMLAnchorElement;
+  const count = document.getElementById('count')!;
+  const meter = document.getElementById('meter')!;
+  if (done > 0) {
+    count.textContent = `${done} of ${rows.length} ready lessons read`;
+    meter.style.width = `${Math.round((done / rows.length) * 100)}%`;
+    if (next) { next.classList.add('is-next'); go.href = next.href; go.textContent = `Continue with lesson ${next.dataset.n}`; }
+    else { go.textContent = 'Read lesson 1 again'; }
+  }
+</script>

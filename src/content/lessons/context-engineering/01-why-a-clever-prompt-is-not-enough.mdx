@@ -1,0 +1,60 @@
+---
+track: context-engineering
+slug: why-a-clever-prompt-is-not-enough
+updated: 2026-11-15
+sources:
+  - text: 'Liu et al., "Lost in the Middle: How Language Models Use Long Contexts", 2023'
+    href: https://arxiv.org/abs/2307.03172
+---
+import Drawing from '../../../components/Drawing.astro';
+import Check from '../../../components/Check.astro';
+import Aside from '../../../components/Aside.astro';
+import TryIt from '../../../components/TryIt.astro';
+import Takeaway from '../../../components/Takeaway.astro';
+
+You write a careful prompt. It starts with "You are an expert", and it works well in a demo.
+
+Then you build a real application around it, and the answers get worse. The prompt did not change. So what did?
+
+## The prompt is one block
+
+Every time you call a model, it reads a **context window**. The context window is everything the model can see in that one call.
+
+In a demo, your prompt is almost the whole window. In a real application, the window also holds the system prompt, the tool definitions, the documents you retrieved and the conversation so far. Your prompt is one block among them.
+
+<Drawing
+  src="/drawings/context-engineering/01-prompt-is-one-block.gif"
+  poster="/drawings/context-engineering/01-prompt-is-one-block.jpg"
+  alt="A hand drawing. On the left, a circle holds the prompt 'You are an expert'. On the right, a tall box labelled context window holds five blocks: system prompt, tools, documents, history, and your prompt at the bottom. A note beside it says fixed token budget."
+  caption="Your prompt goes into the window as one block. The other blocks travel with it."
+/>
+
+## The window has a fixed budget
+
+The window has a fixed size. The size is counted in tokens. A token is a piece of a word that the model reads. As a rough guide, one token is about three quarters of a word.
+
+Everything has to fit inside that budget, and all of it is sent again on every call. So a clever sentence in your prompt cannot help much when the rest of the window is full of things the model does not need.
+
+## A bigger window does not fix it
+
+It is tempting to get a bigger window and put everything in it.
+
+Researchers tested how models use long contexts. A model used the information at the start and at the end of a long context well. It missed more of what sat in the middle. The paper calls this "lost in the middle".
+
+<Aside>We will repeat this experiment in a lab later in this track, and show the numbers we get.</Aside>
+
+<Check
+  question="Your agent's answers got worse after you started adding ten more documents to every call. What is the more likely cause?"
+  options={[
+    { text: 'The prompt wording needs more work.', say: 'Look again. The prompt is the one block that stayed the same. The rest of the window changed.' },
+    { text: 'The useful information now competes with everything else in the window.', right: true, say: 'Yes. The prompt stayed the same. The window around it changed.' },
+  ]}
+/>
+
+<TryIt>
+Open Claude Code after a long session and type `/context`. It shows how full the window is and what is using the space.
+
+Find the largest block. Then find your own prompt.
+</TryIt>
+
+<Takeaway>Your prompt is one block. The model reads the whole window.</Takeaway>

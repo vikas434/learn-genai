@@ -1,0 +1,34 @@
+---
+import '../styles/global.css';
+interface Props { title: string; description: string; current?: 'contents' | 'new'; bare?: boolean }
+const { title, description, current } = Astro.props;
+const fullTitle = title === 'learn-genai.in' ? title : `${title} · learn-genai.in`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#fbf7ec" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <slot name="top" />
+    <header class="wrap site-head">
+      <a class="brand" href="/">learn-genai.in</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="/context-engineering/" aria-current={current === 'contents' ? 'page' : undefined}>Contents</a>
+        <a href="/whats-new/" aria-current={current === 'new' ? 'page' : undefined}>What's new</a>
+      </nav>
+    </header>
+    <slot />
+    <footer class="col site-foot">
+      <span>Written and drawn by Vikas Ranjan</span>
+      <span>Free to read. No sign-up.</span>
+    </footer>
+  </body>
+</html>

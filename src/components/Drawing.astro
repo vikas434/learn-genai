@@ -1,0 +1,32 @@
+---
+interface Props { src: string; poster: string; alt: string; caption?: string; width?: number; height?: number }
+const { src, poster, alt, caption, width = 960, height = 540 } = Astro.props;
+---
+<figure class="drawing">
+  <div class="drawing-frame">
+    <img src={poster} data-gif={src} data-poster={poster} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+    <button type="button" class="drawing-btn" hidden>Play again</button>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+<script>
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('.drawing').forEach((fig) => {
+    const img = fig.querySelector('img')!;
+    const btn = fig.querySelector<HTMLButtonElement>('.drawing-btn')!;
+    const gif = img.dataset.gif!;
+    const poster = img.dataset.poster!;
+    const play = () => {
+      img.src = poster;
+      requestAnimationFrame(() => { img.src = gif; });
+      btn.textContent = 'Play again';
+    };
+    btn.hidden = false;
+    btn.addEventListener('click', play);
+    if (still) { btn.textContent = 'Play the drawing'; return; }
+    let started = false;
+    new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting) && !started) { started = true; play(); }
+    }, { threshold: 0.6 }).observe(img);
+  });
+</script>

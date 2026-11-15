@@ -1,0 +1,38 @@
+{
+  "tracks": [
+    {
+      "n": 1,
+      "slug": "context-engineering",
+      "title": "Context engineering",
+      "blurb": "What the model reads on every call, and how to manage it.",
+      "intro": "A model only knows what is in front of it on each call. This track is about what goes in front of it, what that costs, and how to keep it useful as the work gets longer.",
+      "status": "in-progress",
+      "parts": [
+        {
+          "title": "Part 1: The context window",
+          "lessons": [
+            { "n": 1, "slug": "why-a-clever-prompt-is-not-enough", "title": "Why a clever prompt is not enough", "blurb": "The prompt is one block of what the model reads.", "minutes": 4, "status": "live" },
+            { "n": 2, "slug": "software-1-2-3", "title": "Software 1.0, 2.0 and 3.0", "blurb": "Source code, then datasets, then context.", "status": "planned" },
+            { "n": 3, "slug": "inside-a-context-window", "title": "What is inside a context window", "blurb": "Six parts. Some stay fixed and some keep growing.", "status": "planned" },
+            { "n": 4, "slug": "four-ways-to-manage-context", "title": "Four ways to manage context", "blurb": "Write, select, compress and isolate.", "status": "planned" },
+            { "n": 5, "slug": "how-to-decide", "title": "How to decide which one to use", "blurb": "Four questions, with a short quiz.", "status": "planned" },
+            { "n": 6, "slug": "four-ways-context-goes-wrong", "title": "Four ways context goes wrong", "blurb": "Poisoning, distraction, confusion and clash.", "status": "planned" },
+            { "n": 7, "slug": "measuring-context", "title": "Measuring context: three myths", "blurb": "Labs that test what the earlier lessons claim.", "status": "planned" }
+          ]
+        },
+        {
+          "title": "Part 2: The instruction layer",
+          "lessons": [
+            { "n": 8, "slug": "a-system-prompt-is-a-program", "title": "A system prompt is a program", "blurb": "Role, constraints and defaults, kept under version control.", "status": "planned" },
+            { "n": 9, "slug": "roles-and-personas", "title": "Roles and personas", "blurb": "Role, task, audience and voice.", "status": "planned" }
+          ]
+        }
+      ]
+    },
+    { "n": 2, "slug": "harness-engineering", "title": "Harness engineering", "blurb": "The loop, tools and memory around the model.", "status": "planned", "label": "Being written" },
+    { "n": 3, "slug": "memory", "title": "Memory in AI systems", "blurb": "Why a model forgets, and how systems remember for it.", "status": "planned" },
+    { "n": 4, "slug": "agents-and-tools", "title": "Agents and tools", "blurb": "How a model takes actions, and where that goes wrong.", "status": "planned" },
+    { "n": 5, "slug": "evals", "title": "Evals", "blurb": "How to know whether a change made things better.", "status": "planned" },
+    { "n": 6, "slug": "daily-work", "title": "AI in daily engineering work", "blurb": "Coding, reviews, design docs and triage with an agent.", "status": "planned" }
+  ]
+}

@@ -1,41 +1,34 @@
 # learn-genai.in
 
-A free path for students, engineers and founders who want to use generative AI on real work, and still explain it.
+Short lessons on working with AI, for senior engineers, tech leads and engineering managers. Written like a book: tracks, then lessons, one idea each.
 
-Next.js 15 (App Router) · React 19 · TypeScript · plain CSS with design tokens. No external services, no runtime API keys.
+Astro + MDX, static, deployed on Vercel. No accounts, no database, no API keys.
 
-## Run locally
+## Run
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
-npm run build      # production build check
+npm run dev      # http://localhost:4321
+npm run build
 ```
 
-## Deploy on Vercel
-
-Import this repo in Vercel. It is detected as Next.js automatically: no environment variables, no build settings to change. Every branch gets its own preview URL.
-
-## What's where
+## Where things are
 
 | Path | What |
 |---|---|
-| `app/page.tsx` | Home: announcement bar, mega-menu, search-first hero, hub diagram, method, six stops, seats, numbers, prompt sandbox, library preview, FAQ, colleges teaser, newsletter |
-| `app/path` | The six stops and their lessons |
-| `app/lesson/[slug]` | Lesson: reading, two checks, prompt sandbox, lesson tutor (statically generated for every lesson) |
-| `app/library` | Search and filters (seat, stop, length, kind) |
-| `app/colleges` | Pilot offer for placement cells, faculty view mock-up, contact form |
-| `app/about` | Story, principles, who builds it |
-| `lib/content.ts` | Stops, lessons, personas: edit the curriculum here |
-| `lib/lessons.ts`, `lib/lessons-more.ts` | Lesson bodies, checks, prompts and tutor answers for all 12 lessons |
-| `components/ui.tsx` | Design-system components (Button, Badge, QuizCheck, PromptBox, …) |
-| `app/globals.css` | Design tokens (light + dark) and component styles |
-| `app/site.css` | Page layout and section styles |
-| `docs/teardown.md` | Competitor pattern teardown that shaped this build |
+| `GLOSSARY.md` | The meaning of every term used here. Read this first. |
+| `docs/adr/` | One short record per decision. |
+| `src/data/roadmap.json` | Every track and lesson, in order, with a status. The home page and contents are built from it. |
+| `src/content/lessons/<track>/` | Lessons, one MDX file each. |
+| `src/data/changelog.json` | The "What's new" list. |
+| `public/drawings/<track>/` | Hand-drawn GIFs and their still frames. |
+| `raw-notes/<date>/` | Vikas's handwritten notes, typed up. The source for all content. |
+| `skills/` | The pipeline that turns notes into lessons, drawings and Shorts, and the scene sources for each drawing. |
 
-## Prototype notes (wire these up before launch)
+## Adding a lesson
 
-- **Prompt sandbox and lesson tutor** return scripted answers. Swap the `setTimeout` replies in `components/ui.tsx` (`PromptBox`) and `components/LessonClient.tsx` (`Tutor`) for a call to your model API route.
-- **Newsletter and colleges forms** confirm on the client only. Point them at your email tool or a `/api/contact` route.
-- **Lesson tutor** uses scripted answers per lesson (`tutor` in `lib/lessons.ts` / `lib/lessons-more.ts`) and falls back to the lesson’s key rule.
-- **Faculty view** on `/colleges` is labelled sample data.
+1. Write `src/content/lessons/<track>/NN-<slug>.mdx` with `track`, `slug`, `updated` and `sources` in the frontmatter.
+2. In `roadmap.json`, set that lesson's `status` to `live` and add `minutes`.
+3. Add a line to `changelog.json`.
+
+The build fails if a lesson is marked live and has no file.

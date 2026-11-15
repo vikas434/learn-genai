@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import log from '../data/changelog.json';
+const fmt = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title="What's new" description="Every update to learn-genai.in, by date." current="new">
+  <main class="col">
+    <div class="track-head">
+      <h1 class="display">What's new</h1>
+      <p class="lede">Every update to the site, newest first.</p>
+    </div>
+    <ul class="log">
+      {log.map((e) => (
+        <li><time datetime={e.date}>{fmt(e.date)}</time><span>{e.href ? <a href={e.href}>{e.text}</a> : e.text}</span></li>
+      ))}
+    </ul>
+  </main>
+</Base>
